@@ -1,0 +1,12 @@
+{
+    "name": "anomaly/stripe_gateway-extension",
+    "type": "streams-addon",
+    "autoload": {
+        "psr-4": {
+            "Anomaly\\StripeGatewayExtension\\": "src/"
+        }
+    },
+    "require": {
+        "omnipay/stripe": "^2.2"
+    }
+}
