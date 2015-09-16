@@ -1,7 +1,13 @@
 <?php
 
 return [
-    'api_key' => [
-        'type' => 'anomaly.field_type.text'
+    'live'         => [
+        'type' => 'anomaly.field_type.boolean'
+    ],
+    'test_api_key' => [
+        'type' => 'anomaly.field_type.encrypted'
+    ],
+    'live_api_key' => [
+        'type' => 'anomaly.field_type.encrypted'
     ]
 ];
