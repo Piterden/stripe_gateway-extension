@@ -5,9 +5,11 @@ return [
         'type' => 'anomaly.field_type.boolean'
     ],
     'test_api_key' => [
-        'type' => 'anomaly.field_type.encrypted'
+        'required' => true,
+        'type'     => 'anomaly.field_type.encrypted'
     ],
     'live_api_key' => [
-        'type' => 'anomaly.field_type.encrypted'
+        'required' => true,
+        'type'     => 'anomaly.field_type.encrypted'
     ]
 ];
