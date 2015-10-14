@@ -1,8 +1,12 @@
 <?php
 
 return [
-    'live'         => [
-        'type' => 'anomaly.field_type.boolean'
+    'mode'         => [
+        'type'   => 'anomaly.field_type.boolean',
+        'config' => [
+            'on_text'  => 'LIVE',
+            'off_text' => 'TEST'
+        ]
     ],
     'test_api_key' => [
         'required' => true,

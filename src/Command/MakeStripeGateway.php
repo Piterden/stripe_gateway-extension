@@ -23,14 +23,14 @@ class MakeStripeGateway implements SelfHandling
      */
     public function handle(SettingRepositoryInterface $settings)
     {
-        $live = $settings->get('anomaly.extension.stripe_gateway::live');
+        $mode = $settings->get('anomaly.extension.stripe_gateway::mode');
 
-        if (!$live) {
+        if (!$mode) {
             throw new \Exception('Please configure the Stripe gateway before using.');
         }
 
         /* @var EncryptedFieldTypePresenter $key */
-        if ($live && $live->getValue()) {
+        if ($mode && $mode->getValue()) {
             $key = $settings->value('anomaly.extension.stripe_gateway::live_api_key');
         } else {
             $key = $settings->value('anomaly.extension.stripe_gateway::test_api_key');
@@ -39,7 +39,7 @@ class MakeStripeGateway implements SelfHandling
         $gateway = new Gateway();
 
         $gateway->setApiKey($key->decrypted());
-        $gateway->setTestMode(!$live->getValue());
+        $gateway->setTestMode(!$mode->getValue());
 
         return $gateway;
     }

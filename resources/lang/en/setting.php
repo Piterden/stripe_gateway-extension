@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'live'         => [
-        'name'         => 'Live',
-        'instructions' => 'Is this gateway live?'
+    'mode'         => [
+        'name'         => 'Mode',
+        'instructions' => 'Define the gateway status.'
     ],
     'test_api_key' => [
         'name'         => 'Test API Key',
