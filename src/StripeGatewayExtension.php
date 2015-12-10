@@ -1,7 +1,6 @@
 <?php namespace Anomaly\StripeGatewayExtension;
 
-use Anomaly\PaymentsModule\Gateway\Contract\GatewayExtensionInterface;
-use Anomaly\Streams\Platform\Addon\Extension\Extension;
+use Anomaly\PaymentsModule\Gateway\GatewayExtension;
 use Anomaly\StripeGatewayExtension\Command\MakeStripeGateway;
 use Omnipay\Stripe\Gateway;
 
@@ -13,7 +12,7 @@ use Omnipay\Stripe\Gateway;
  * @author        Ryan Thompson <ryan@anomaly.is>
  * @package       Anomaly\StripeGatewayExtension
  */
-class StripeGatewayExtension extends Extension implements GatewayExtensionInterface
+class StripeGatewayExtension extends GatewayExtension
 {
 
     /**
