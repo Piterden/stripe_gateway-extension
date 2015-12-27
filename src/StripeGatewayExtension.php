@@ -1,8 +1,9 @@
 <?php namespace Anomaly\StripeGatewayExtension;
 
+use Anomaly\PaymentsModule\Gateway\Contract\GatewayInterface;
 use Anomaly\PaymentsModule\Gateway\GatewayExtension;
 use Anomaly\StripeGatewayExtension\Command\MakeStripeGateway;
-use Omnipay\Stripe\Gateway;
+use Omnipay\Common\AbstractGateway;
 
 /**
  * Class StripeGatewayExtension
@@ -21,15 +22,17 @@ class StripeGatewayExtension extends GatewayExtension
      *
      * @var null|string
      */
-    protected $provides = 'anomaly.module.payments::payment_gateway.stripe';
+    protected $provides = 'anomaly.module.payments::gateway.stripe';
 
     /**
-     * Return a new Gateway instance.
+     * Return an Omnipay gateway.
      *
-     * @return Gateway
+     * @param GatewayInterface $gateway
+     * @return AbstractGateway
+     * @throws \Exception
      */
-    public function make()
+    public function make(GatewayInterface $gateway)
     {
-        return $this->dispatch(new MakeStripeGateway());
+        return $this->dispatch(new MakeStripeGateway($gateway));
     }
 }

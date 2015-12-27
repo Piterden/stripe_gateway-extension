@@ -1,11 +1,14 @@
 <?php
 
 return [
-    'mode'         => [
+    'test_mode' => [
         'type'   => 'anomaly.field_type.boolean',
         'config' => [
-            'on_text'  => 'LIVE',
-            'off_text' => 'TEST'
+            'default_value' => true,
+            'on_text'       => 'TEST',
+            'on_color'      => 'warning',
+            'off_text'      => 'LIVE',
+            'off_color'     => 'success'
         ]
     ],
     'test_api_key' => [

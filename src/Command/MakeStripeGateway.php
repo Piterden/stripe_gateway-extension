@@ -1,7 +1,8 @@
 <?php namespace Anomaly\StripeGatewayExtension\Command;
 
+use Anomaly\ConfigurationModule\Configuration\Contract\ConfigurationRepositoryInterface;
 use Anomaly\EncryptedFieldType\EncryptedFieldTypePresenter;
-use Anomaly\SettingsModule\Setting\Contract\SettingRepositoryInterface;
+use Anomaly\PaymentsModule\Gateway\Contract\GatewayInterface;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Omnipay\Stripe\Gateway;
 
@@ -17,29 +18,48 @@ class MakeStripeGateway implements SelfHandling
 {
 
     /**
+     * The gateway instance.
+     *
+     * @var GatewayInterface
+     */
+    protected $gateway;
+
+    /**
+     * Create a new MakePaypalProGateway instance.
+     *
+     * @param GatewayInterface $gateway
+     */
+    public function __construct(GatewayInterface $gateway)
+    {
+        $this->gateway = $gateway;
+    }
+
+    /**
      * Handle the command.
      *
-     * @param SettingRepositoryInterface $settings
+     * @param ConfigurationRepositoryInterface $configuration
      */
-    public function handle(SettingRepositoryInterface $settings)
+    public function handle(ConfigurationRepositoryInterface $configuration)
     {
-        $mode = $settings->get('anomaly.extension.stripe_gateway::mode');
-
-        if (!$mode) {
-            throw new \Exception('Please configure the Stripe gateway before using.');
-        }
+        $mode = $configuration->get('anomaly.extension.stripe_gateway::test_mode', $this->gateway->getSlug());
 
         /* @var EncryptedFieldTypePresenter $key */
-        if ($mode && $mode->getValue()) {
-            $key = $settings->value('anomaly.extension.stripe_gateway::live_api_key');
+        if ($mode->getValue()) {
+            $key = $configuration->presenter(
+                'anomaly.extension.stripe_gateway::test_api_key',
+                $this->gateway->getSlug()
+            );
         } else {
-            $key = $settings->value('anomaly.extension.stripe_gateway::test_api_key');
+            $key = $configuration->presenter(
+                'anomaly.extension.stripe_gateway::live_api_key',
+                $this->gateway->getSlug()
+            );
         }
 
         $gateway = new Gateway();
 
         $gateway->setApiKey($key->decrypted());
-        $gateway->setTestMode(!$mode->getValue());
+        $gateway->setTestMode($mode->getValue());
 
         return $gateway;
     }

@@ -23,7 +23,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Anomaly\\StripeGatewayExtension\\": "src/"
+            "Anomaly\\StripeGatewayExtension\\": "src/",
+            "Omnipay\\Stripe\\": "vendor/omnipay/stripe/src/"
         }
     },
     "require": {
