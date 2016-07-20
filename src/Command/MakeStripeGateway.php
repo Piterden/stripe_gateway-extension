@@ -2,7 +2,7 @@
 
 use Anomaly\ConfigurationModule\Configuration\Contract\ConfigurationRepositoryInterface;
 use Anomaly\EncryptedFieldType\EncryptedFieldTypePresenter;
-use Anomaly\PaymentsModule\Gateway\Contract\GatewayInterface;
+use Anomaly\PaymentsModule\Account\Contract\AccountInterface;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Omnipay\Stripe\Gateway;
 
@@ -18,20 +18,20 @@ class MakeStripeGateway implements SelfHandling
 {
 
     /**
-     * The gateway instance.
+     * The account instance.
      *
-     * @var GatewayInterface
+     * @var AccountInterface
      */
-    protected $gateway;
+    protected $account;
 
     /**
-     * Create a new MakePaypalProGateway instance.
+     * Create a new MakeStripeGateway instance.
      *
-     * @param GatewayInterface $gateway
+     * @param AccountInterface $account
      */
-    public function __construct(GatewayInterface $gateway)
+    public function __construct(AccountInterface $account)
     {
-        $this->gateway = $gateway;
+        $this->account = $account;
     }
 
     /**
@@ -41,24 +41,24 @@ class MakeStripeGateway implements SelfHandling
      */
     public function handle(ConfigurationRepositoryInterface $configuration)
     {
-        $mode = $configuration->get('anomaly.extension.stripe_gateway::test_mode', $this->gateway->getSlug());
+        $mode = $configuration->get('anomaly.extension.stripe_gateway::test_mode', $this->account->getSlug());
 
         /* @var EncryptedFieldTypePresenter $key */
         if ($mode->getValue()) {
             $key = $configuration->presenter(
                 'anomaly.extension.stripe_gateway::test_api_key',
-                $this->gateway->getSlug()
+                $this->account->getSlug()
             );
         } else {
             $key = $configuration->presenter(
                 'anomaly.extension.stripe_gateway::live_api_key',
-                $this->gateway->getSlug()
+                $this->account->getSlug()
             );
         }
 
         $gateway = new Gateway();
 
-        $gateway->setApiKey($key->decrypted());
+        $gateway->setApiKey($key->decrypt());
         $gateway->setTestMode($mode->getValue());
 
         return $gateway;

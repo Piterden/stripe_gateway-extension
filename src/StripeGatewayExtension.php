@@ -27,12 +27,11 @@ class StripeGatewayExtension extends GatewayExtension
     /**
      * Return an Omnipay gateway.
      *
-     * @param GatewayInterface $gateway
      * @return AbstractGateway
      * @throws \Exception
      */
-    public function make(GatewayInterface $gateway)
+    public function make()
     {
-        return $this->dispatch(new MakeStripeGateway($gateway));
+        return $this->dispatch(new MakeStripeGateway($this->account));
     }
 }
