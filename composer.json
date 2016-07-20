@@ -21,6 +21,11 @@
     "support": {
         "email": "support@anomaly.is"
     },
+    "autoload": {
+        "psr-4": {
+            "Anomaly\\StripeGatewayExtension\\": "src/"
+        }
+    },
     "require": {
         "omnipay/stripe": "^2.3"
     }
