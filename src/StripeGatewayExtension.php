@@ -1,6 +1,6 @@
 <?php namespace Anomaly\StripeGatewayExtension;
 
-use Anomaly\PaymentsModule\Gateway\Contract\GatewayInterface;
+use Anomaly\PaymentsModule\Gateway\Contract\UsesOmnipay;
 use Anomaly\PaymentsModule\Gateway\GatewayExtension;
 use Anomaly\StripeGatewayExtension\Command\MakeStripeGateway;
 use Omnipay\Common\AbstractGateway;
@@ -13,8 +13,21 @@ use Omnipay\Common\AbstractGateway;
  * @author        Ryan Thompson <ryan@anomaly.is>
  * @package       Anomaly\StripeGatewayExtension
  */
-class StripeGatewayExtension extends GatewayExtension
+class StripeGatewayExtension extends GatewayExtension implements UsesOmnipay
 {
+
+    /**
+     * The supported methods.
+     *
+     * @var array
+     */
+    protected $supports = [
+        'authorize',
+        'purchase',
+        'refund',
+        'create_card',
+        'delete_card',
+    ];
 
     /**
      * This extension provides the Stripe
@@ -30,7 +43,7 @@ class StripeGatewayExtension extends GatewayExtension
      * @return AbstractGateway
      * @throws \Exception
      */
-    public function make()
+    public function omnipay()
     {
         return $this->dispatch(new MakeStripeGateway($this->account));
     }

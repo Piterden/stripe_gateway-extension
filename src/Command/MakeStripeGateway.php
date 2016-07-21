@@ -1,9 +1,9 @@
 <?php namespace Anomaly\StripeGatewayExtension\Command;
 
 use Anomaly\ConfigurationModule\Configuration\Contract\ConfigurationRepositoryInterface;
-use Anomaly\EncryptedFieldType\EncryptedFieldTypePresenter;
 use Anomaly\PaymentsModule\Account\Contract\AccountInterface;
 use Illuminate\Contracts\Bus\SelfHandling;
+use Illuminate\Contracts\Config\Repository;
 use Omnipay\Stripe\Gateway;
 
 /**
@@ -38,28 +38,29 @@ class MakeStripeGateway implements SelfHandling
      * Handle the command.
      *
      * @param ConfigurationRepositoryInterface $configuration
+     * @param Repository                       $config
+     * @return Gateway
      */
-    public function handle(ConfigurationRepositoryInterface $configuration)
+    public function handle(ConfigurationRepositoryInterface $configuration, Repository $config)
     {
-        $mode = $configuration->get('anomaly.extension.stripe_gateway::test_mode', $this->account->getSlug());
+        $testMode = $config->get('anomaly.module.payments::config.test_mode');
 
-        /* @var EncryptedFieldTypePresenter $key */
-        if ($mode->getValue()) {
+        if ($testMode) {
             $key = $configuration->presenter(
                 'anomaly.extension.stripe_gateway::test_api_key',
                 $this->account->getSlug()
-            );
+            )->__value();
         } else {
             $key = $configuration->presenter(
                 'anomaly.extension.stripe_gateway::live_api_key',
                 $this->account->getSlug()
-            );
+            )->__value();
         }
 
         $gateway = new Gateway();
 
-        $gateway->setApiKey($key->decrypt());
-        $gateway->setTestMode($mode->getValue());
+        $gateway->setApiKey($key);
+        $gateway->setTestMode($testMode);
 
         return $gateway;
     }

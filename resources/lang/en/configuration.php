@@ -1,9 +1,6 @@
 <?php
 
 return [
-    'test_mode'    => [
-        'name' => 'Mode'
-    ],
     'test_api_key' => [
         'name' => 'Test API Key'
     ],
