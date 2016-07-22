@@ -45,6 +45,6 @@ class StripeGatewayExtension extends GatewayExtension implements UsesOmnipay
      */
     public function omnipay()
     {
-        return $this->dispatch(new MakeStripeGateway($this->account));
+        return $this->dispatch(new MakeStripeGateway($this->getAccount()));
     }
 }
