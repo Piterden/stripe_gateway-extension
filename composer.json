@@ -27,6 +27,9 @@
         }
     },
     "require": {
+        "anomaly/streams-platform": "1.1.*",
+        "anomaly/configurations-module": "2.1.*",
+        "anomaly/payments-module": "latest",
         "omnipay/stripe": "^2.3"
     }
 }
